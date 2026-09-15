@@ -1,0 +1,9 @@
+{
+    "name": "nf-core/reportree",
+    "description": "ReporTree: pathogen genetic cluster analysis and epidemiological data linkage",
+    "directory": "modules/nf-core/reportree",
+    "homePage": "https://github.com/nf-core/modules/tree/master/modules/nf-core/reportree",
+    "url": "https://raw.githubusercontent.com/nf-core/modules/master/modules/nf-core/reportree",
+    "version": "2.6.1",
+    "built": "2026-09-14T00:00:00Z"
+}

@@ -1,0 +1,30 @@
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/tests-schema.json
+name: "reportree"
+description: "Reportree nf-core module test config"
+tags:
+  - pathogen
+  - surveillance
+  - clustering
+
+modules:
+  - name: "reportree"
+    display: "ReporTree"
+    description: "ReporTree module test"
+    command: "reportree.py -m {metadata} -o {output}"
+    inputs:
+      - metadata: "data/test_metadata.tsv"
+    outputs:
+      - output: "reporTree_output"
+
+test:
+  - name: "reportree basic"
+    description: "Test reportree module with basic inputs"
+    command: "reportree.py -m {metadata} -o {output}"
+    inputs:
+      - metadata: "data/test_metadata.tsv"
+    outputs:
+      - output: "reporTree_output"
+    assertions:
+      - "process.success"
+      - "path('reporTree_output/metadata_w_partitions.tsv').exists"

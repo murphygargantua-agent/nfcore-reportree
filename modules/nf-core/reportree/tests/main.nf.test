@@ -1,0 +1,53 @@
+nextflow_process {
+
+    name "Test Process REPORREE"
+    script "../main.nf"
+    process "REPOMTREE"
+
+    tag "modules"
+    tag "modules_nfcore"
+    tag "reportree"
+
+    test("reporree stub") {
+
+        options "-stub"
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id: 'test', single_end:false ],
+                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out).match() }
+            )
+        }
+    }
+
+    test("reporree with metadata only") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [id: 'test', single_end: false],
+                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(sanitizeOutput(process.out).findAll { key, val -> key != 'output' }).match() }
+            )
+        }
+    }
+}

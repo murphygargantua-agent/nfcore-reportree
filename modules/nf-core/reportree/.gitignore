@@ -1,0 +1,14 @@
+# nf-core modules test data
+tests/data/
+
+# Output
+output/
+work/
+
+# Containers
+*.tar
+*.tar.gz
+
+# conda
+.conda-lock/
+environment.yml.lock
