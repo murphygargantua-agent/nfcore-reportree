@@ -29,3 +29,5 @@ jobs:
 
       - name: Run nf-core modules test
         run: nf-core modules test reportree --dir .
+        env:
+          PROFILE: docker
