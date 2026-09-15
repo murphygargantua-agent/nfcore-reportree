@@ -11,11 +11,13 @@ This module packages ReporTree v2.6.1 as an nf-core module, providing:
 - Docker container (`docker.io/murphygargantua-agent/reportree:2.6.1`)
 - nf-core module process with proper input/output channels
 - nf-test test files
+- GitHub Actions workflow for automated testing
+- Unit tests for module structure validation
 
 ## Usage
 
 ```groovy
-include { REPORTREE } from 'modules/nf-core/reportree'
+include { REPORREE } from 'modules/nf-core/reportree'
 
 reportree(
     meta: [ id: 'sample1', single_end: false ],
@@ -28,18 +30,60 @@ reportree(
 ## Module structure
 
 ```
-modules/nf-core/reportree/
-├── Dockerfile          # Custom Docker image with ReporTree and all dependencies
-├── environment.yml     # Conda environment (bioconda::reportree=2.6.1)
-├── main.nf             # Nextflow process definition
-├── meta.yml            # Module metadata (inputs, outputs, tool info)
-├── modules.json        # nf-core modules metadata
-├── .gitignore
+nfcore-reportree/
+├── .github/
+│   └── workflows/
+│       └── nfcore-test.yml      # nf-core module tests on GitHub Actions
+├── modules/
+│   └── nf-core/
+│       └── reportree/
+│           ├── Dockerfile          # Custom Docker image with ReporTree
+│           ├── environment.yml     # Conda environment
+│           ├── main.nf             # Nextflow process definition
+│           ├── meta.yml            # Module metadata
+│           ├── modules.json        # nf-core modules metadata
+│           ├── .gitignore
+│           ├── README.md
+│           └── tests/
+│               ├── main.nf.test    # nf-test test cases
+│               ├── nextflow.config # Test Nextflow config
+│               └── test.yml        # Module test configuration
 └── tests/
-    ├── main.nf.test    # nf-test test cases
-    ├── nextflow.config # Test Nextflow config
-    └── test.yml        # Module test configuration
+    └── test_module.py             # Unit tests for module structure
 ```
+
+## Testing
+
+### nf-core module tests
+The GitHub Actions workflow at `.github/workflows/nfcore-test.yml` runs:
+```bash
+nf-core modules test reportree --dir .
+```
+
+### Unit tests
+```bash
+python3 tests/test_module.py
+```
+This validates the module structure, required files, and correct configuration.
+
+## Input types supported
+
+- **metadata** (required): Metadata table in TSV format
+- **tree** (optional): Newick tree for clustering
+- **alignment** (optional): Sequence alignment for conversion to profile
+- **vcf** (optional): VCF file for conversion to profile
+- **variants** (optional): TSV with mutations per sample
+- **distance_matrix** (optional): Pairwise distance matrix
+- **partitions** (optional): Pre-computed partitions table
+- **allele_profile** (optional): Allele/SNP profile matrix
+- **sequences** (optional): Sequences for profile conversion
+
+## Output files
+
+- `metadata_w_partitions.tsv`: Metadata with cluster columns
+- `partitions_summary.tsv`: Summary statistics for clusters
+- `variable_summary.tsv`: Summary for grouping variables
+- `partitions.tsv`: Genetic clusters at selected thresholds
 
 ## Citation
 

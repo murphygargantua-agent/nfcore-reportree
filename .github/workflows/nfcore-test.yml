@@ -1,0 +1,31 @@
+name: nf-core module tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  nf-core-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Nextflow
+        uses: nf-core/setup-nextflow@v2
+        with:
+          version: '24.04.1'
+
+      - name: Set up nf-core tools
+        uses: nf-core/setup-nf-core@v2
+        with:
+          version: '2.14.1'
+
+      - name: Run nf-core modules test
+        run: nf-core modules test reportree --dir .
