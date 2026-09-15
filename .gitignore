@@ -1,3 +1,6 @@
+# nf-core modules test data
+tests/data/
+
 # Output
 output/
 work/
@@ -23,3 +26,7 @@ Thumbs.db
 # nf-core cache
 .cache/
 *.lock
+
+# Nextflow logs
+*.log
+.nextflow/

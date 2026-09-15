@@ -12,10 +12,9 @@ from pathlib import Path
 
 def find_module_root():
     """Find the reportree module root directory."""
-    # Try common locations
     candidates = [
         Path("modules/nf-core/reportree"),
-        Path("/home/hermes-agent/nfcore-reportree/modules/nf-core/reportree"),
+        Path("/home/hermes-agent/projects/nfcore-reportree/modules/nf-core/reportree"),
         Path(__file__).parent / "nfcore-reportree" / "modules" / "nf-core" / "reportree",
     ]
     for candidate in candidates:
@@ -158,6 +157,69 @@ def test_github_workflow_exists():
     assert workflow_file.exists(), "nfcore-test.yml workflow missing"
 
 
+def test_citations_exists():
+    """Test that CITATIONS.md exists at repo root."""
+    repo_root = Path(__file__).parent.parent
+    citations = repo_root / "CITATIONS.md"
+    assert citations.exists(), "CITATIONS.md missing"
+    content = citations.read_text()
+    assert "ReporTree" in content, "ReporTree not cited"
+    assert len(content) > 100, "CITATIONS too short"
+
+
+def test_changelog_exists():
+    """Test that CHANGELOG.md exists at repo root."""
+    repo_root = Path(__file__).parent.parent
+    changelog = repo_root / "CHANGELOG.md"
+    assert changelog.exists(), "CHANGELOG.md missing"
+    content = changelog.read_text()
+    assert len(content) > 50, "CHANGELOG too short"
+
+
+def test_conf_meta_yml_exists():
+    """Test that conf/meta.yml exists at repo root."""
+    repo_root = Path(__file__).parent.parent
+    conf_meta = repo_root / "conf" / "meta.yml"
+    assert conf_meta.exists(), "conf/meta.yml missing"
+    with open(conf_meta) as f:
+        data = yaml.safe_load(f)
+    assert "name" in data, "No name in conf/meta.yml"
+
+
+def test_root_modules_json_exists():
+    """Test that root-level modules.json exists."""
+    repo_root = Path(__file__).parent.parent
+    modules_json = repo_root / "modules.json"
+    assert modules_json.exists(), "Root modules.json missing"
+    with open(modules_json) as f:
+        data = json.load(f)
+    assert "modules" in data, "No modules key in root modules.json"
+    assert "nf-core/reportree" in data["modules"], "reportree not in root modules.json"
+
+
+def test_test_data_exists():
+    """Test that minimal test data files exist."""
+    repo_root = Path(__file__).parent.parent
+    test_data_dir = repo_root / "tests" / "data" / "reportree"
+    assert test_data_dir.exists(), "Test data directory missing"
+    metadata = test_data_dir / "test_metadata.tsv"
+    assert metadata.exists(), "test_metadata.tsv missing"
+    content = metadata.read_text()
+    assert "\t" in content, "test_metadata.tsv not tab-separated"
+    assert "sequence" in content.split("\n")[0] or "ID" in content.split("\n")[0], "No ID/sequence header in metadata"
+    partitions = test_data_dir / "test_partitions.tsv"
+    assert partitions.exists(), "test_partitions.tsv missing"
+
+
+def test_nf_test_no_typo():
+    """Test that main.nf.test references the correct process name."""
+    root = find_module_root()
+    nf_test = root / "tests" / "main.nf.test"
+    content = nf_test.read_text()
+    assert 'process "REPORREE"' in content, "Process name typo in nf-test"
+    assert 'process "REPOMTREE"' not in content, "Typo REPOMTREE still present"
+
+
 if __name__ == "__main__":
     test_functions = [
         test_main_nf_exists,
@@ -172,6 +234,12 @@ if __name__ == "__main__":
         test_gitignore_exists,
         test_readme_exists,
         test_github_workflow_exists,
+        test_citations_exists,
+        test_changelog_exists,
+        test_conf_meta_yml_exists,
+        test_root_modules_json_exists,
+        test_test_data_exists,
+        test_nf_test_no_typo,
     ]
     passed = 0
     failed = 0

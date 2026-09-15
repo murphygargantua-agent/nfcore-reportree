@@ -2,15 +2,17 @@ nextflow_process {
 
     name "Test Process REPORREE"
     script "../main.nf"
-    process "REPOMTREE"
+    process "REPORREE"
 
     tag "modules"
     tag "modules_nfcore"
     tag "reportree"
+    tag "reportree/chlamydia"
 
     test("reporree stub") {
 
         options "-stub"
+        config "./nextflow.config"
         when {
             process {
                 """
@@ -32,12 +34,59 @@ nextflow_process {
 
     test("reporree with metadata only") {
 
+        config "./nextflow.config"
         when {
             process {
                 """
                 input[0] = Channel.of([
                     [id: 'test', single_end: false],
                     [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(sanitizeOutput(process.out).findAll { key, val -> key != 'output' }).match() }
+            )
+        }
+    }
+
+    test("reporree with metadata and allele profile") {
+
+        config "./nextflow.config"
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [id: 'test', single_end: false],
+                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ],
+                    [ file(params.modules_testdata_base_path + 'reportree/test_allele_profile.tsv', checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(sanitizeOutput(process.out).findAll { key, val -> key != 'output' }).match() }
+            )
+        }
+    }
+
+    test("reporree with metadata and partitions") {
+
+        config "./nextflow.config"
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [id: 'test', single_end: false],
+                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ],
+                    [ file(params.modules_testdata_base_path + 'reportree/test_partitions.tsv', checkIfExists: true) ]
                 ])
                 """
             }

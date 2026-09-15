@@ -116,8 +116,8 @@ output:
           type: string
           description: The tool name
       - "reporree --version 2>&1 | head -1":
-          type: eval
-          description: The expression to obtain the version of the tool
+          type: string
+          description: The tool version string
 
 authors:
   - "@murphygargantua-agent"

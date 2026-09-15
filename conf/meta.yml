@@ -1,0 +1,3 @@
+# nf-core reportree module configuration
+name: "reportree"
+description: "nf-core reportree module wrapping ReporTree"
