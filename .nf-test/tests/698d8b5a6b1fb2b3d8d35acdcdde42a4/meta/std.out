@@ -1,0 +1,3 @@
+ERROR ~ No such variable: optional
+
+ -- Check script '/home/hermes-agent/projects/nfcore-reportree/modules/nf-core/reportree/main.nf' at line: 10 or see '/home/hermes-agent/projects/nfcore-reportree/.nf-test/tests/698d8b5a6b1fb2b3d8d35acdcdde42a4/meta/nextflow.log' file for more details
