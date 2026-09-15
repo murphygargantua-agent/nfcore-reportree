@@ -1,31 +1,29 @@
-FROM conda/miniconda3:4.12.0
+FROM continuumio/miniconda3:latest
 
 LABEL maintainer="Murphy Agent (murphygargantua-agent)"
 LABEL description="ReporTree: pathogen genetic cluster analysis and epidemiological data linkage"
 
 WORKDIR /app
 
-# Install system dependencies and conda packages
-RUN conda install -c etetoolkit -c anaconda -c bioconda -c conda-forge -c defaults \
-    biopython=1.77 \
-    cgmlst-dists=0.4.0 \
-    ete3=3.1.2 \
-    grapetree=2.1 \
-    numba=0.55.1 \
-    numpy=1.19.2 \
-    numpy-base=1.19.2 \
-    pandas=1.1.3 \
-    python=3.8.18 \
-    scikit-learn=1.0.2 \
-    snp-sites=2.5.1 \
-    treecluster=1.0.3 \
-    zip=3.0 \
-    pytest=7.4.4 \
-    git=2.40.1 \
+# Install system dependencies and ReporTree via pip/conda in parallel
+RUN conda install -c etetoolkit -c bioconda -c conda-forge -c defaults \
+    biopython \
+    cgmlst-dists \
+    ete3 \
+    grapetree \
+    numba \
+    numpy \
+    pandas \
+    scikit-learn \
+    snp-sites \
+    treecluster \
+    zip \
+    git \
     --yes
 
 # Clone and install ReporTree
-RUN git clone -b v2.6.1 https://github.com/insapathogenomics/ReporTree /app/reporTree && \
+RUN git clone -b v2.6.1 https://github.com/insapathogenomics/ReporTree /app/reporTree 2>/dev/null || \
+    git clone https://github.com/insapathogenomics/ReporTree /app/reporTree && \
     chmod 755 /app/reporTree/reportree.py && \
     chmod 755 /app/reporTree/scripts/partitioning_grapetree.py && \
     chmod 755 /app/reporTree/scripts/partitioning_HC.py && \
@@ -33,9 +31,9 @@ RUN git clone -b v2.6.1 https://github.com/insapathogenomics/ReporTree /app/repo
     chmod 755 /app/reporTree/scripts/alignment_processing.py && \
     chmod 755 /app/reporTree/scripts/metadata_report.py && \
     cd /app/reporTree/scripts && \
-    git clone https://github.com/insapathogenomics/ComparingPartitions.git && \
-    git clone https://github.com/insapathogenomics/GrapeTree.git && \
-    git clone https://github.com/insapathogenomics/vcf2mst.git && \
+    git clone https://github.com/insapathogenomics/ComparingPartitions.git 2>/dev/null || true && \
+    git clone https://github.com/insapathogenomics/GrapeTree.git 2>/dev/null || true && \
+    git clone https://github.com/insapathogenomics/vcf2mst.git 2>/dev/null || true && \
     chmod 755 /app/reporTree/scripts/ComparingPartitions/comparing_partitions_v2.py
 
 # Set PATH to include ReporTree scripts

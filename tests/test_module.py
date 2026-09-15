@@ -73,7 +73,7 @@ def test_dockerfile_exists():
     dockerfile = root / "Dockerfile"
     assert dockerfile.exists(), "Dockerfile does not exist"
     content = dockerfile.read_text()
-    assert "FROM conda/miniconda3" in content, "Wrong base image"
+    assert "FROM conda/miniconda3" in content or "FROM continuumio/miniconda3" in content, "Wrong base image"
     assert "reportree" in content.lower(), "ReporTree not installed"
     assert "PATH" in content, "PATH not set"
 

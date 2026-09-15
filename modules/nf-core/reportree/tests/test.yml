@@ -1,7 +1,7 @@
 ---
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/tests-schema.json
 name: "reportree"
-description: "Reportree nf-core module test config"
+description: "ReporTree nf-core module test config"
 tags:
   - pathogen
   - surveillance
@@ -13,7 +13,7 @@ modules:
     description: "ReporTree module test"
     command: "reportree.py -m {metadata} -o {output}"
     inputs:
-      - metadata: "data/test_metadata.tsv"
+      - metadata: "tests/data/reportree/test_metadata.tsv"
     outputs:
       - output: "reporTree_output"
 
@@ -22,7 +22,7 @@ test:
     description: "Test reportree module with basic inputs"
     command: "reportree.py -m {metadata} -o {output}"
     inputs:
-      - metadata: "data/test_metadata.tsv"
+      - metadata: "tests/data/reportree/test_metadata.tsv"
     outputs:
       - output: "reporTree_output"
     assertions:
