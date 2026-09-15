@@ -10,7 +10,6 @@ keywords:
   - wgMLST
   - SNP
   - phylogenetics
-
 tools:
   - reportree:
       description: |
@@ -27,7 +26,8 @@ tools:
       documentation: https://github.com/insapathogenomics/ReporTree/wiki
       tool_dev_url: https://github.com/insapathogenomics/ReporTree
       doi: "10.1186/s13073-023-01196-1"
-      licence: ["GPL-3.0-only"]
+      licence:
+        - "GPL-3.0-only"
       identifier: biotools:reportree
 
 input:
@@ -40,7 +40,20 @@ input:
         type: file
         description: Metadata table in TSV format (required, no headers with blank spaces)
         pattern: "*.tsv"
-        ontologies: []
+        ontologies:
+          - edam: http://edamontology.org/format_3475 # TSV
+    - allele_profile:
+        type: file
+        description: Allele/SNP profile matrix in TSV format (optional)
+        pattern: "*.tsv"
+        ontologies:
+          - edam: http://edamontology.org/format_3475 # TSV
+    - partitions:
+        type: file
+        description: Partitions table (matrix with genetic clusters) in TSV format (optional)
+        pattern: "*.tsv"
+        ontologies:
+          - edam: http://edamontology.org/format_3475 # TSV
     - tree:
         type: file
         description: Newick tree file for obtaining genetic clusters (optional)
@@ -60,22 +73,15 @@ input:
         type: file
         description: TSV with list of mutations per sample for conversion into profile (optional)
         pattern: "*.{tsv,txt}"
-        ontologies: []
+        ontologies:
+          - edam: http://edamontology.org/format_3475 # TSV
     - distance_matrix:
         type: file
         description: Distance matrix for clustering (optional)
         pattern: "*.{tsv,txt,mtx}"
-        ontologies: []
-    - partitions:
-        type: file
-        description: Partitions table (matrix with genetic clusters) in TSV format (optional)
-        pattern: "*.tsv"
-        ontologies: []
-    - allele_profile:
-        type: file
-        description: Allele/SNP profile matrix in TSV format (optional)
-        pattern: "*.tsv"
-        ontologies: []
+        ontologies:
+          - edam: http://edamontology.org/format_3475 # TSV
+          - edam: http://edamontology.org/format_3916 # MTX
     - sequences:
         type: file
         description: Sequences file for conversion into profile (optional)
@@ -88,26 +94,9 @@ output:
         type: map
         description: |
           Groovy Map containing sample information
-    - - "${output}/metadata_w_partitions.tsv":
-        type: file
-        description: Initial metadata with additional columns for genetic clusters and nomenclature
-        pattern: "metadata_w_partitions.tsv"
-        ontologies: []
-    - - "${output}/partitions_summary.tsv":
-        type: file
-        description: Summary report with statistics/trends for derived genetic clusters
-        pattern: "partitions_summary.tsv"
-        ontologies: []
-    - - "${output}/variable_summary.tsv":
-        type: file
-        description: Summary report for any grouping variable in metadata
-        pattern: "variable_summary.tsv"
-        ontologies: []
-    - - "${output}/partitions.tsv":
-        type: file
-        description: Genetic clusters obtained for each user-selected partition threshold
-        pattern: "partitions.tsv"
-        ontologies: []
+      - "reporTree_output/**":
+          type: directory
+          description: Output directory for ReporTree results
   versions_reporree:
     - - ${task.process}:
         type: string
@@ -116,8 +105,20 @@ output:
           type: string
           description: The tool name
       - "reporree --version 2>&1 | head -1":
+          type: eval
+          description: The expression to obtain the version of the tool
+
+topics:
+  versions:
+    - - ${task.process}:
+        type: string
+        description: The process the versions were collected from
+      - reportree:
           type: string
-          description: The tool version string
+          description: The tool name
+      - "reporree --version 2>&1 | head -1":
+          type: eval
+          description: The expression to obtain the version of the tool
 
 authors:
   - "@murphygargantua-agent"

@@ -1,20 +1,11 @@
-process REPORREE {
+process REPORTREE {
     tag "${meta.id}"
     label 'process_medium'
 
-    conda "${moduleDir}/environment.yml"
     container "docker.io/murphygargantua-agent/reportree:2.6.1"
 
     input:
-    tuple val(meta), path(metadata)
-    path(tree)            , optional: true
-    path(alignment)       , optional: true
-    path(vcf)             , optional: true
-    path(variants)        , optional: true
-    path(distance_matrix) , optional: true
-    path(partitions)      , optional: true
-    path(allele_profile)  , optional: true
-    path(sequences)       , optional: true
+    tuple val(meta), path(metadata), path(allele_profile), path(partitions), path(tree), path(alignment), path(vcf), path(variants), path(distance_matrix), path(sequences)
 
     output:
     tuple val(meta), path("reporTree_output/**"), emit: output
@@ -27,6 +18,14 @@ process REPORREE {
     """
     reportree.py \\
         -m "${metadata}" \\
+        ${allele_profile ? '-P "${allele_profile:-}"' : ''} \\
+        ${partitions ? '-p "${partitions:-}"' : ''} \\
+        ${tree ? '-t "${tree:-}"' : ''} \\
+        ${alignment ? '-a "${alignment:-}"' : ''} \\
+        ${vcf ? '-v "${vcf:-}"' : ''} \\
+        ${variants ? '-V "${variants:-}"' : ''} \\
+        ${distance_matrix ? '-d "${distance_matrix:-}"' : ''} \\
+        ${sequences ? '-s "${sequences:-}"' : ''} \\
         -o "reporTree_output" \\
         --dist 1 \\
         --method-threshold "all" \\

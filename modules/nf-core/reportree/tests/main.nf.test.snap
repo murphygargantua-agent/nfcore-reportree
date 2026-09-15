@@ -1,0 +1,122 @@
+{
+    "reporree stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        [
+                            "metadata_w_partitions.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "partitions.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "partitions_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "variable_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        "REPORREE",
+                        "reporree",
+                        "bash: line 1: reporree: command not found"
+                    ]
+                ],
+                "output": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        [
+                            "metadata_w_partitions.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "partitions.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "partitions_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "variable_summary.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "versions_reporree": [
+                    [
+                        "REPORREE",
+                        "reporree",
+                        "bash: line 1: reporree: command not found"
+                    ]
+                ]
+            }
+        ],
+        "timestamp": "2026-09-15T13:33:34.169453334",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "reporree with metadata and allele profile": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    
+                ],
+                "output": [
+                    
+                ],
+                "versions_reporree": [
+                    
+                ]
+            }
+        ],
+        "timestamp": "2026-09-15T13:16:40.491244945",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "reporree with metadata only": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    
+                ],
+                "output": [
+                    
+                ],
+                "versions_reporree": [
+                    
+                ]
+            }
+        ],
+        "timestamp": "2026-09-15T13:16:37.27353487",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    },
+    "reporree with metadata and partitions": {
+        "content": [
+            {
+                "0": [
+                    
+                ],
+                "1": [
+                    
+                ],
+                "output": [
+                    
+                ],
+                "versions_reporree": [
+                    
+                ]
+            }
+        ],
+        "timestamp": "2026-09-15T13:16:43.575122917",
+        "meta": {
+            "nf-test": "0.9.5",
+            "nextflow": "26.04.6"
+        }
+    }
+}

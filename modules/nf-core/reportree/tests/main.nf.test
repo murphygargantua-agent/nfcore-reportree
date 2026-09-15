@@ -1,24 +1,30 @@
 nextflow_process {
 
     name "Test Process REPORREE"
-    script "../main.nf"
-    process "REPORREE"
+    script "modules/nf-core/reportree/main.nf"
+    process "REPORTREE"
 
     tag "modules"
     tag "modules_nfcore"
     tag "reportree"
-    tag "reportree/chlamydia"
 
     test("reporree stub") {
 
-        options "-stub"
-        config "./nextflow.config"
         when {
+            options "-stub"
             process {
                 """
                 input[0] = Channel.of([
-                    [ id: 'test', single_end:false ],
-                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ]
+                    [id: 'test'],
+                    file(params.modules_testdata_base_path + '/reportree/test_metadata.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_allele_profile.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_partitions.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_tree.nwk', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_alignment.fasta', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.vcf', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_distance_matrix.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_sequences.fasta', checkIfExists: true)
                 ])
                 """
             }
@@ -34,13 +40,20 @@ nextflow_process {
 
     test("reporree with metadata only") {
 
-        config "./nextflow.config"
         when {
             process {
                 """
                 input[0] = Channel.of([
-                    [id: 'test', single_end: false],
-                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ]
+                    [id: 'test'],
+                    file(params.modules_testdata_base_path + '/reportree/test_metadata.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_allele_profile.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_partitions.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_tree.nwk', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_alignment.fasta', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.vcf', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_distance_matrix.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_sequences.fasta', checkIfExists: true)
                 ])
                 """
             }
@@ -49,21 +62,27 @@ nextflow_process {
         then {
             assertAll (
                 { assert process.success },
-                { assert snapshot(sanitizeOutput(process.out).findAll { key, val -> key != 'output' }).match() }
+                { assert snapshot(process.out).match() }
             )
         }
     }
 
     test("reporree with metadata and allele profile") {
 
-        config "./nextflow.config"
         when {
             process {
                 """
                 input[0] = Channel.of([
-                    [id: 'test', single_end: false],
-                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ],
-                    [ file(params.modules_testdata_base_path + 'reportree/test_allele_profile.tsv', checkIfExists: true) ]
+                    [id: 'test'],
+                    file(params.modules_testdata_base_path + '/reportree/test_metadata.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_allele_profile.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_partitions.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_tree.nwk', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_alignment.fasta', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.vcf', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_distance_matrix.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_sequences.fasta', checkIfExists: true)
                 ])
                 """
             }
@@ -72,21 +91,27 @@ nextflow_process {
         then {
             assertAll (
                 { assert process.success },
-                { assert snapshot(sanitizeOutput(process.out).findAll { key, val -> key != 'output' }).match() }
+                { assert snapshot(process.out).match() }
             )
         }
     }
 
     test("reporree with metadata and partitions") {
 
-        config "./nextflow.config"
         when {
             process {
                 """
                 input[0] = Channel.of([
-                    [id: 'test', single_end: false],
-                    [ file(params.modules_testdata_base_path + 'reportree/test_metadata.tsv', checkIfExists: true) ],
-                    [ file(params.modules_testdata_base_path + 'reportree/test_partitions.tsv', checkIfExists: true) ]
+                    [id: 'test'],
+                    file(params.modules_testdata_base_path + '/reportree/test_metadata.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_allele_profile.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_partitions.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_tree.nwk', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_alignment.fasta', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.vcf', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_variants.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_distance_matrix.tsv', checkIfExists: true),
+                    file(params.modules_testdata_base_path + '/reportree/test_sequences.fasta', checkIfExists: true)
                 ])
                 """
             }
@@ -95,7 +120,7 @@ nextflow_process {
         then {
             assertAll (
                 { assert process.success },
-                { assert snapshot(sanitizeOutput(process.out).findAll { key, val -> key != 'output' }).match() }
+                { assert snapshot(process.out).match() }
             )
         }
     }

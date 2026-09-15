@@ -1,0 +1,57 @@
+ERROR ~ Error executing process > 'REPORREE (test)'
+
+Caused by:
+  Process `REPORREE (test)` terminated with an error exit status (127)
+
+
+Command executed:
+
+  reportree.py \
+      -m "test_metadata.tsv" \
+      -P "${allele_profile:-}" \
+      -p "${partitions:-}" \
+      -t "${tree:-}" \
+      -a "${alignment:-}" \
+      -v "${vcf:-}" \
+      -V "${variants:-}" \
+      -d "${distance_matrix:-}" \
+      -s "${sequences:-}" \
+      -o "reporTree_output" \
+      --dist 1 \
+      --method-threshold "all" \
+      --HCmethod-threshold "all" \
+      --threshold 10 \
+      --HCthreshold 10 \
+      --n-obs 1000 \
+      --AdjustedWallace 0 \
+      --partitions2report "all" \
+      --grep-cluster-id false \
+      --clusters "all" \
+      --subsets false \
+      --subset-by "" \
+      --filter-column "" \
+      --columns-summary-report "all" \
+      --frequency-matrix false \
+      --count-matrix false \
+      --pivot false \
+      --mx-transpose false \
+      --update-cluster-names false \
+      --keep-redundants false \
+      --stability false \
+      --unzip false
+
+Command exit status:
+  127
+
+Command output:
+  (empty)
+
+Command error:
+  .command.sh: line 3: reportree.py: command not found
+
+Work dir:
+  /home/hermes-agent/projects/nfcore-reportree/.nf-test/tests/f5536b16b05a264d436fd9723986cb67/work/5e/13ddc538a957751af0933ae3393583
+
+Tip: you can try to figure out what's wrong by changing to the process work dir and showing the script file named `.command.sh`
+
+ -- Check '/home/hermes-agent/projects/nfcore-reportree/.nf-test/tests/f5536b16b05a264d436fd9723986cb67/meta/nextflow.log' file for details
