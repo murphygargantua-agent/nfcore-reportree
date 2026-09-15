@@ -30,3 +30,9 @@ Thumbs.db
 # Nextflow logs
 *.log
 .nextflow/.nf-test/
+
+# Cache files
+.nextflow
+.nf-test
+.nextflow.log
+

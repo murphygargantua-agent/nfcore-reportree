@@ -8,55 +8,62 @@ process REPORTREE {
     tuple val(meta), path(metadata), path(allele_profile), path(partitions), path(tree), path(alignment), path(vcf), path(variants), path(distance_matrix), path(sequences)
 
     output:
-    tuple val(meta), path("reporTree_output/**"), emit: output
-    tuple val("${task.process}"), val('reporree'), eval('reporree --version 2>&1 | head -1'), emit: versions_reporree, topic: versions
+    tuple val(meta), path("${prefix}_metadata_w_partitions.tsv"), emit: metadata_w_partitions
+    tuple val(meta), path("${prefix}_partitions_summary.tsv"),     emit: partitions_summary, optional: true
+    tuple val(meta), path("${prefix}_variable_summary.tsv"),       emit: variable_summary, optional: true
+    tuple val(meta), path("${prefix}_partitions.tsv"),             emit: partitions, optional: true
+    tuple val("${task.process}"), val('reportree'), eval('reportree.py --version 2>/dev/null | head -1'), emit: versions_reportree, topic: versions
 
     when:
     task.ext.when == null || task.ext.when
 
     script:
+    prefix = task.ext.prefix ?: (meta.id ? "${meta.id}" : 'reportree_output')
+    def metadata_path = metadata.toString()
+
+    def allele_profile_cmd = allele_profile && allele_profile.toFile().length() > 0 ? "-a ${allele_profile}" : ''
+    def partitions_cmd     = partitions     && partitions.toFile().length() > 0 ? "-p ${partitions}" : ''
+    def tree_cmd           = tree           && tree.toFile().length() > 0 ? "-t ${tree}" : ''
+    def alignment_cmd      = alignment      && alignment.toFile().length() > 0 ? "-align ${alignment}" : ''
+    def vcf_cmd            = vcf            && vcf.toFile().length() > 0 ? "-vcf ${vcf}" : ''
+    def variants_cmd       = variants       && variants.toFile().length() > 0 ? "-var ${variants}" : ''
+    def distance_matrix_cmd= distance_matrix && distance_matrix.toFile().length() > 0 ? "-d_mx ${distance_matrix}" : ''
+    def sequences_cmd      = sequences      && sequences.toFile().length() > 0 ? "-align ${sequences}" : ''
+
+    // When tree is provided, ReporTree can only use metadata + tree + distance_matrix.
+    def has_tree = tree && tree.toFile().length() > 0
+    def use_allele_profile = has_tree ? '' : allele_profile_cmd
+    def use_partitions = has_tree ? '' : partitions_cmd
+    def use_tree = has_tree ? tree_cmd : ''
+    def use_alignment = has_tree ? '' : alignment_cmd
+    def use_vcf = has_tree ? '' : vcf_cmd
+    def use_variants = has_tree ? '' : variants_cmd
+    def use_distance_matrix = has_tree ? '' : (distance_matrix && distance_matrix.toFile().length() > 0 && !vcf ? distance_matrix_cmd : '')
+    def use_sequences = has_tree ? '' : sequences_cmd
+
+    def cmd = [
+        'reportree.py',
+        '-m ' + metadata_path,
+        use_allele_profile,
+        use_partitions,
+        use_tree,
+        use_alignment,
+        use_vcf,
+        use_variants,
+        use_distance_matrix,
+        use_sequences,
+        '-out ' + prefix
+    ].join(' ')
     """
-    reportree.py \\
-        -m "${metadata}" \\
-        ${allele_profile ? '-P "${allele_profile:-}"' : ''} \\
-        ${partitions ? '-p "${partitions:-}"' : ''} \\
-        ${tree ? '-t "${tree:-}"' : ''} \\
-        ${alignment ? '-a "${alignment:-}"' : ''} \\
-        ${vcf ? '-v "${vcf:-}"' : ''} \\
-        ${variants ? '-V "${variants:-}"' : ''} \\
-        ${distance_matrix ? '-d "${distance_matrix:-}"' : ''} \\
-        ${sequences ? '-s "${sequences:-}"' : ''} \\
-        -o "reporTree_output" \\
-        --dist 1 \\
-        --method-threshold "all" \\
-        --HCmethod-threshold "all" \\
-        --threshold 10 \\
-        --HCthreshold 10 \\
-        --n-obs 1000 \\
-        --AdjustedWallace 0 \\
-        --partitions2report "all" \\
-        --grep-cluster-id false \\
-        --clusters "all" \\
-        --subsets false \\
-        --subset-by "" \\
-        --filter-column "" \\
-        --columns-summary-report "all" \\
-        --frequency-matrix false \\
-        --count-matrix false \\
-        --pivot false \\
-        --mx-transpose false \\
-        --update-cluster-names false \\
-        --keep-redundants false \\
-        --stability false \\
-        --unzip false
+    ${cmd}
     """
 
     stub:
+    prefix = task.ext.prefix ?: (meta.id ? "${meta.id}" : 'reportree_output')
     """
-    mkdir -p reporTree_output
-    touch reporTree_output/metadata_w_partitions.tsv
-    touch reporTree_output/partitions_summary.tsv
-    touch reporTree_output/variable_summary.tsv
-    touch reporTree_output/partitions.tsv
+    touch ${prefix}_metadata_w_partitions.tsv
+    touch ${prefix}_partitions_summary.tsv
+    touch ${prefix}_variable_summary.tsv
+    touch ${prefix}_partitions.tsv
     """
 }

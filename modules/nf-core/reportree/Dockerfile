@@ -5,23 +5,25 @@ LABEL description="ReporTree: pathogen genetic cluster analysis and epidemiologi
 
 WORKDIR /app
 
-# Install system dependencies and ReporTree via pip/conda in parallel
-RUN conda install -c etetoolkit -c bioconda -c conda-forge -c defaults \
-    biopython \
-    cgmlst-dists \
+# ReporTree's own pinned environment (reportree_env.yml): python 3.8 + pandas 1.1.3.
+# Newer pandas (>=2.2) breaks metadata_report.py with an astype shape TypeError.
+RUN conda install -n base -c conda-forge -c etetoolkit -c bioconda -c insapathogenomics \
+    python=3.8 \
+    biopython=1.77 \
+    cgmlst-dists_genpat-it=0.4.0 \
     ete3 \
-    grapetree \
-    numba \
-    numpy \
-    pandas \
+    grapetree=2.1 \
+    numba=0.55.1 \
+    numpy=1.19.2 \
+    numpy-base=1.19.2 \
+    pandas=1.1.3 \
     scikit-learn \
-    snp-sites \
-    treecluster \
+    snp-sites=2.5.1 \
+    treecluster=1.0.3 \
     zip \
-    git \
     --yes
 
-# Clone and install ReporTree
+# Clone and install ReporTree v2.6.1
 RUN git clone -b v2.6.1 https://github.com/insapathogenomics/ReporTree /app/reporTree 2>/dev/null || \
     git clone https://github.com/insapathogenomics/ReporTree /app/reporTree && \
     chmod 755 /app/reporTree/reportree.py && \
@@ -40,7 +42,7 @@ RUN git clone -b v2.6.1 https://github.com/insapathogenomics/ReporTree /app/repo
 ENV PATH="/app/reporTree:/app/reporTree/scripts:/app/reporTree/scripts/ComparingPartitions:/app/reporTree/scripts/GrapeTree:/app/reporTree/scripts/vcf2mst:${PATH}"
 
 # Verify installation
-RUN reportree.py --version 2>&1 | head -1 || true
+RUN reportree.py --version 2>/dev/null | head -1 || true
 
 # Create working directory
 RUN mkdir -p /app/work

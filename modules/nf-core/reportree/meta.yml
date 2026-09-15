@@ -89,34 +89,58 @@ input:
         ontologies: []
 
 output:
-  output:
+  metadata_w_partitions:
     - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-      - "reporTree_output/**":
-          type: directory
-          description: Output directory for ReporTree results
-  versions_reporree:
+          type: map
+          description: |
+            Groovy Map containing sample information
+      - "${prefix}_metadata_w_partitions.tsv":
+          type: file
+          description: Metadata with cluster columns
+  partitions_summary:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+      - "${prefix}_partitions_summary.tsv":
+          type: file
+          description: Summary statistics for clusters
+  variable_summary:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+      - "${prefix}_variable_summary.tsv":
+          type: file
+          description: Summary for grouping variables
+  partitions:
+    - - meta:
+          type: map
+          description: |
+            Groovy Map containing sample information
+      - "${prefix}_partitions.tsv":
+          type: file
+          description: Genetic clusters at selected thresholds
+  versions_reportree:
     - - ${task.process}:
-        type: string
-        description: The process the versions were collected from
+          type: string
+          description: The process the versions were collected from
       - reportree:
           type: string
           description: The tool name
-      - "reporree --version 2>&1 | head -1":
+      - "reportree.py --version 2>/dev/null | head -1":
           type: eval
           description: The expression to obtain the version of the tool
 
 topics:
   versions:
     - - ${task.process}:
-        type: string
-        description: The process the versions were collected from
+          type: string
+          description: The process the versions were collected from
       - reportree:
           type: string
           description: The tool name
-      - "reporree --version 2>&1 | head -1":
+      - "reportree.py --version 2>/dev/null | head -1":
           type: eval
           description: The expression to obtain the version of the tool
 
