@@ -37,4 +37,4 @@ jobs:
         run: python3 tests/test_module.py
 
       - name: Run nf-test (local, no docker)
-        run: NXF_SYNTAX_PARSER=v1 nf-test test --tag reportree --profile local
+        run: nf-test test --tag reportree --profile local
