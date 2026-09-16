@@ -55,4 +55,4 @@ jobs:
         run: python3 tests/test_module.py
 
       - name: Run nf-test (local, no docker)
-        run: nf-test test --tag reportree --profile local
+        run: PATH="${GITHUB_WORKSPACE:-.}:$PATH" nf-test test --tag reportree --profile local
