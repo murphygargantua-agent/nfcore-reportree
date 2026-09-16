@@ -26,7 +26,13 @@ jobs:
         run: pip install nf-core==4.1.0
 
       - name: Install nf-test
-        run: pip install nf-test
+        run: |
+          mkdir -p /opt/nf-test
+          curl -L -o /tmp/nf-test.tar.gz https://github.com/askimed/nf-test/releases/download/v0.9.5/nf-test-0.9.5.tar.gz
+          tar -xzf /tmp/nf-test.tar.gz -C /opt/nf-test
+          cp /opt/nf-test/nf-test /usr/local/bin/nf-test
+          chmod +x /usr/local/bin/nf-test
+          nf-test --help
 
       - name: Set up Python
         uses: actions/setup-python@v5
