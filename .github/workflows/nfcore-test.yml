@@ -30,9 +30,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Download Zenodo Chlamydia trachomatis cgMLST background data
-        run: curl -sL -o /tmp/zenodo_bg.zip "https://zenodo.org/records/19120159/files/02_input_to_setup_cgMLST_1230_background.zip?download=1" && unzip -o /tmp/zenodo_bg.zip -d /tmp/
-
       - name: Run nf-core modules lint
         run: nf-core modules lint reportree --dir .
 
