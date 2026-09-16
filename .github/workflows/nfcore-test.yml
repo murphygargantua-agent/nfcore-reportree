@@ -23,7 +23,7 @@ jobs:
           version: '24.04.1'
 
       - name: Set up nf-core tools
-        run: pip install nf-core==2.14.1
+        run: pip install nf-core==4.1.0
 
       - name: Set up Python
         uses: actions/setup-python@v5
