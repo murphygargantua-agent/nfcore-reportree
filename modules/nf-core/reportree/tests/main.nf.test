@@ -114,4 +114,42 @@ nextflow_process {
             assert process.success
         }
     }
+
+    test("reportree with Zenodo Chlamydia trachomatis data") {
+
+        when {
+            params {
+                loci_called = "0.95"
+                analysis = "HC"
+                hc_threshold = "single-475,single-75,single-25,single-10"
+                columns_summary_report = "lineage,country,anatomical_site"
+                metadata2report = "lineage"
+                nomenclature_code_levels = "single-475,single-75,single-25"
+            }
+            process {
+                """
+                def zenodo = System.getProperty('user.dir') + "/tests/data/reportree/zenodo"
+                input[0] = [
+                    [ id:'zenodo' ],
+                    file(zenodo + '/Ct_metadata.tsv', checkIfExists: true),
+                    file(zenodo + '/Ct_alleles_missing_code_0.tsv', checkIfExists: true),
+                    file(zenodo + '/Ct_partitions_to_setup_HC_nomenclature.tsv', checkIfExists: true),
+                    file('missing', checkIfExists: false),
+                    file('missing', checkIfExists: false),
+                    file('missing', checkIfExists: false),
+                    file('missing', checkIfExists: false),
+                    file('missing', checkIfExists: false)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert file("zenodo_metadata_w_partitions.tsv").exists
+            assert file("zenodo_partitions_summary.tsv").exists
+            assert file("zenodo_variable_summary.tsv").exists
+            assert file("zenodo_partitions.tsv").exists
+        }
+    }
 }
