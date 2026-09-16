@@ -23,9 +23,7 @@ jobs:
           version: '24.04.1'
 
       - name: Set up nf-core tools
-        uses: nf-core/setup-nf-core@v2
-        with:
-          version: '2.14.1'
+        run: pip install nf-core==2.14.1
 
       - name: Download Zenodo Chlamydia trachomatis cgMLST background data
         run: curl -sL -o /tmp/zenodo_bg.zip "https://zenodo.org/records/19120159/files/02_input_to_setup_cgMLST_1230_background.zip?download=1" && unzip -o /tmp/zenodo_bg.zip -d /tmp/
