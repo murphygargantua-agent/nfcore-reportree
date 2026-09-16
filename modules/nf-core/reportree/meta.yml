@@ -1,150 +1,148 @@
-name: "reportree"
-description: "ReporTree: a surveillance-oriented tool for pathogen genetic cluster analysis and epidemiological data linkage"
+name: reportree
+description: 'ReporTree: a surveillance-oriented tool for pathogen genetic cluster analysis and epidemiological data linkage'
 keywords:
-  - pathogen
-  - surveillance
-  - clustering
-  - epidemiology
-  - tree
-  - cgMLST
-  - wgMLST
-  - SNP
-  - phylogenetics
+- pathogen
+- surveillance
+- clustering
+- epidemiology
+- tree
+- cgMLST
+- wgMLST
+- SNP
+- phylogenetics
 tools:
-  - reportree:
-      description: |
-        ReporTree is a flexible pipeline that facilitates the detection of genetic clusters
-        and their linkage to epidemiological data. It obtains genetic clusters at any
-        threshold level(s) of a tree, SNP or cg/wgMLST allele matrix, VCF files, sequence
-        alignment, or distance matrix, and produces summary reports with statistics/trends
-        for the derived genetic clusters.
+- reportree:
+    description: 'ReporTree is a flexible pipeline that facilitates the detection of genetic clusters and their linkage to epidemiological data.
 
-        ReporTree is implemented in Python 3.8 and comprises six main scripts orchestrated
-        by reportree.py. It relies on external tools including cgmlst-dists, ete3, grapetree,
-        treecluster, snp-sites, vcf2mst, and ComparingPartitions.
-      homepage: https://github.com/insapathogenomics/ReporTree
-      documentation: https://github.com/insapathogenomics/ReporTree/wiki
-      tool_dev_url: https://github.com/insapathogenomics/ReporTree
-      doi: "10.1186/s13073-023-01196-1"
-      licence:
-        - "GPL-3.0-only"
-      identifier: biotools:reportree
 
+      ReporTree is implemented in Python 3.8 and comprises six main scripts orchestrated by reportree.py.
+
+      '
+    homepage: https://github.com/insapathogenomics/ReporTree
+    documentation: https://github.com/insapathogenomics/ReporTree/wiki
+    tool_dev_url: https://github.com/insapathogenomics/ReporTree
+    doi: 10.1186/s13073-023-01196-1
+    licence:
+    - GPL-3.0-only
+    identifier: biotools:reportree
 input:
-  - - meta:
-        type: map
-        description: |
-          Groovy Map containing sample information
-          e.g. [ id:'sample1', single_end:false ]
-    - metadata:
-        type: file
-        description: Metadata table in TSV format (required, no headers with blank spaces)
-        pattern: "*.tsv"
-        ontologies:
-          - edam: http://edamontology.org/format_3475 # TSV
-    - allele_profile:
-        type: file
-        description: Allele/SNP profile matrix in TSV format (optional)
-        pattern: "*.tsv"
-        ontologies:
-          - edam: http://edamontology.org/format_3475 # TSV
-    - partitions:
-        type: file
-        description: Partitions table (matrix with genetic clusters) in TSV format (optional)
-        pattern: "*.tsv"
-        ontologies:
-          - edam: http://edamontology.org/format_3475 # TSV
-    - tree:
-        type: file
-        description: Newick tree file for obtaining genetic clusters (optional)
-        pattern: "*.{newick,nwk,tree}"
-        ontologies: []
-    - alignment:
-        type: file
-        description: Sequence alignment for conversion into profile (optional)
-        pattern: "*.{fasta,fna,fa,aln}"
-        ontologies: []
-    - vcf:
-        type: file
-        description: VCF file for conversion into profile (optional)
-        pattern: "*.{vcf,vcf.gz}"
-        ontologies: []
-    - variants:
-        type: file
-        description: TSV with list of mutations per sample for conversion into profile (optional)
-        pattern: "*.{tsv,txt}"
-        ontologies:
-          - edam: http://edamontology.org/format_3475 # TSV
-    - distance_matrix:
-        type: file
-        description: Distance matrix for clustering (optional)
-        pattern: "*.{tsv,txt,mtx}"
-        ontologies:
-          - edam: http://edamontology.org/format_3475 # TSV
-          - edam: http://edamontology.org/format_3916 # MTX
-    - sequences:
-        type: file
-        description: Sequences file for conversion into profile (optional)
-        pattern: "*.{fasta,fna,fa}"
-        ontologies: []
+- - meta:
+      type: map
+      description: 'Groovy Map containing sample information
 
+        e.g. [ id:''sample1'', single_end:false ]'
+  - metadata:
+      type: file
+      description: Metadata table in TSV format (required, no headers with blank spaces)
+      pattern: '*.tsv'
+      ontologies:
+      - edam: http://edamontology.org/format_3475
+  - allele_profile:
+      type: file
+      description: Allele/SNP profile matrix in TSV format (optional)
+      pattern: '*.tsv'
+      ontologies:
+      - edam: http://edamontology.org/format_3475
+  - partitions:
+      type: file
+      description: Partitions table (matrix with genetic clusters) in TSV format (optional)
+      pattern: '*.tsv'
+      ontologies:
+      - edam: http://edamontology.org/format_3475
+  - tree:
+      type: file
+      description: Newick tree file for obtaining genetic clusters (optional)
+      pattern: '*.{newick,nwk,tree}'
+      ontologies: []
+  - alignment:
+      type: file
+      description: Sequence alignment for conversion into profile (optional)
+      pattern: '*.{fasta,fna,fa,aln}'
+      ontologies: []
+  - vcf:
+      type: file
+      description: VCF file for conversion into profile (optional)
+      pattern: '*.{vcf,vcf.gz}'
+      ontologies: []
+  - variants:
+      type: file
+      description: TSV with list of mutations per sample for conversion into profile (optional)
+      pattern: '*.{tsv,txt}'
+      ontologies:
+      - edam: http://edamontology.org/format_3475
+  - distance_matrix:
+      type: file
+      description: Distance matrix for clustering (optional)
+      pattern: '*.{tsv,txt,mtx}'
+      ontologies:
+      - edam: http://edamontology.org/format_3475
+      - edam: http://edamontology.org/format_3916
+  - sequences:
+      type: file
+      description: Sequences file for conversion into profile (optional)
+      pattern: '*.{fasta,fna,fa}'
+      ontologies: []
+  - nomenclature_file:
+      type: file
+      description: Nomenclature mapping file for cluster naming (optional)
+      pattern: '*.tsv'
+      ontologies:
+      - edam: http://edamontology.org/format_3475
 output:
   metadata_w_partitions:
-    - - meta:
-          type: map
-          description: |
-            Groovy Map containing sample information
-      - "${prefix}_metadata_w_partitions.tsv":
-          type: file
-          description: Metadata with cluster columns
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${prefix}_metadata_w_partitions.tsv:
+        type: file
+        description: Metadata with cluster columns
+        ontologies: []
   partitions_summary:
-    - - meta:
-          type: map
-          description: |
-            Groovy Map containing sample information
-      - "${prefix}_partitions_summary.tsv":
-          type: file
-          description: Summary statistics for clusters
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${prefix}_partitions_summary.tsv:
+        type: file
+        description: Summary statistics for clusters
+        ontologies: []
   variable_summary:
-    - - meta:
-          type: map
-          description: |
-            Groovy Map containing sample information
-      - "${prefix}_variable_summary.tsv":
-          type: file
-          description: Summary for grouping variables
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${prefix}_variable_summary.tsv:
+        type: file
+        description: Summary for grouping variables
+        ontologies: []
   partitions:
-    - - meta:
-          type: map
-          description: |
-            Groovy Map containing sample information
-      - "${prefix}_partitions.tsv":
-          type: file
-          description: Genetic clusters at selected thresholds
+  - - meta:
+        type: map
+        description: Groovy Map containing sample information
+    - ${prefix}_partitions.tsv:
+        type: file
+        description: Genetic clusters at selected thresholds
+        ontologies: []
   versions_reportree:
-    - - ${task.process}:
-          type: string
-          description: The process the versions were collected from
-      - reportree:
-          type: string
-          description: The tool name
-      - "reportree.py --version 2>/dev/null | head -1":
-          type: eval
-          description: The expression to obtain the version of the tool
-
+  - ${task.process}:
+      type: string
+      description: The process the versions were collected from
+    reportree:
+      type: string
+      description: The tool name
+    reportree.py --version 2>/dev/null | head -1:
+      type: eval
+      description: The expression to obtain the version of the tool
 topics:
   versions:
-    - - ${task.process}:
-          type: string
-          description: The process the versions were collected from
-      - reportree:
-          type: string
-          description: The tool name
-      - "reportree.py --version 2>/dev/null | head -1":
-          type: eval
-          description: The expression to obtain the version of the tool
-
+  - ${task.process}:
+      type: string
+      description: The process the versions were collected from
+    reportree:
+      type: string
+      description: The tool name
+    reportree.py --version 2>/dev/null | head -1:
+      type: eval
+      description: The expression to obtain the version of the tool
 authors:
-  - "@murphygargantua-agent"
+- '@murphygargantua-agent'
 maintainers:
-  - "@murphygargantua-agent"
+- '@murphygargantua-agent'
