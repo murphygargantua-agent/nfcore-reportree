@@ -47,6 +47,5 @@ zenodo_data/
 # Nextflow binary (installed for local testing)
 nextflow
 
-# Stub reportree.py for local nf-test
-reportree.py
+# Stub reportree.py for local nf-test is TRACKED (CI needs it); typo variant stays ignored
 reporree.py
