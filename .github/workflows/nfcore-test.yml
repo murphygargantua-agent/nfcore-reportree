@@ -25,16 +25,19 @@ jobs:
       - name: Set up nf-core tools
         run: pip install nf-core==2.14.1
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Download Zenodo Chlamydia trachomatis cgMLST background data
         run: curl -sL -o /tmp/zenodo_bg.zip "https://zenodo.org/records/19120159/files/02_input_to_setup_cgMLST_1230_background.zip?download=1" && unzip -o /tmp/zenodo_bg.zip -d /tmp/
 
-      - name: Run nf-core modules test
-        run: nf-core modules test reportree --dir .
-        env:
-          PROFILE: docker
+      - name: Run nf-core lint
+        run: nextflow lint -c nextflow.config modules/nf-core/reportree/main.nf
 
       - name: Run Python unit tests
         run: python3 tests/test_module.py
 
-      - name: Run nf-test (local, no docker required)
+      - name: Run nf-test (local, no docker)
         run: NXF_SYNTAX_PARSER=v1 nf-test test --tag reportree --profile local
