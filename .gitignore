@@ -36,3 +36,4 @@ Thumbs.db
 .nf-test
 .nextflow.log
 
+zenodo_data/
