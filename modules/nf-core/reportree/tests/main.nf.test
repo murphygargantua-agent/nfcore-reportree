@@ -133,7 +133,7 @@ nextflow_process {
         }
     }
 
-    test("reportree with Zenodo Chlamydia trachomatis data") {
+    test("reportree with metadata and Zenodo Chlamydia trachomatis data") {
 
         when {
             params {
@@ -184,6 +184,127 @@ nextflow_process {
             assert file(process.out.partitions_summary[0][1]).exists()
             assert file(process.out.variable_summary[0][1]).exists()
             assert file(process.out.partitions[0][1]).exists()
+        }
+    }
+
+    test("reportree with VCF and variants inputs") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file('$data/test_metadata.tsv', checkIfExists: true),
+                    file('$data/test_allele_profile.tsv', checkIfExists: true),
+                    file('$data/test_partitions.tsv', checkIfExists: true),
+                    file('$data/test_tree.nwk', checkIfExists: true),
+                    file('$data/test_alignment.fasta', checkIfExists: true),
+                    file('$data/test_variants.vcf', checkIfExists: true),
+                    file('$data/test_variants.tsv', checkIfExists: true),
+                    file('$data/test_distance_matrix.tsv', checkIfExists: true),
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+        }
+    }
+
+    test("reportree with distance_matrix and sequences inputs") {
+
+        when {
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file('$data/test_metadata.tsv', checkIfExists: true),
+                    file('$data/test_allele_profile.tsv', checkIfExists: true),
+                    file('$data/test_partitions.tsv', checkIfExists: true),
+                    file('$data/test_tree.nwk', checkIfExists: true),
+                    file('$data/test_alignment.fasta', checkIfExists: true),
+                    file('$data/test_variants.vcf', checkIfExists: true),
+                    file('$data/test_variants.tsv', checkIfExists: true),
+                    file('$data/test_distance_matrix.tsv', checkIfExists: true),
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+        }
+    }
+
+    test("reportree with prefix parameter") {
+
+        when {
+            params {
+                prefix = "custom_output"
+            }
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file('$data/test_metadata.tsv', checkIfExists: true),
+                    file('$data/test_allele_profile.tsv', checkIfExists: true),
+                    file('$data/test_partitions.tsv', checkIfExists: true),
+                    file('$data/test_tree.nwk', checkIfExists: true),
+                    file('$data/test_alignment.fasta', checkIfExists: true),
+                    file('$data/test_variants.vcf', checkIfExists: true),
+                    file('$data/test_variants.tsv', checkIfExists: true),
+                    file('$data/test_distance_matrix.tsv', checkIfExists: true),
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.metadata_w_partitions[0]
+            assert process.out.partitions_summary[0]
+            assert process.out.variable_summary[0]
+            assert process.out.partitions[0]
+        }
+    }
+
+    test("reportree stub test outputs") {
+
+        when {
+            options "-stub"
+            process {
+                """
+                input[0] = [
+                    [ id:'test' ],
+                    file('$data/test_metadata.tsv', checkIfExists: true),
+                    file('$data/test_allele_profile.tsv', checkIfExists: true),
+                    file('$data/test_partitions.tsv', checkIfExists: true),
+                    file('$data/test_tree.nwk', checkIfExists: true),
+                    file('$data/test_alignment.fasta', checkIfExists: true),
+                    file('$data/test_variants.vcf', checkIfExists: true),
+                    file('$data/test_variants.tsv', checkIfExists: true),
+                    file('$data/test_distance_matrix.tsv', checkIfExists: true),
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
+                ]
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert file(process.out.metadata_w_partitions[0][1]).exists()
+            assert file(process.out.partitions_summary[0][1]).exists()
+            assert file(process.out.variable_summary[0][1]).exists()
+            assert file(process.out.partitions[0][1]).exists()
+            assert process.out.metadata_w_partitions[0][1].toString().contains('test_metadata_w_partitions.tsv')
         }
     }
 }
