@@ -1,3 +1,2 @@
-A_2497	A_363
-A_2497	2	1
-A_363	1	2
+sequence	cluster_1	cluster_2	cluster_3
+A_2497	cluster_1	cluster_2	cluster_3

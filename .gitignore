@@ -37,3 +37,13 @@ Thumbs.db
 .nextflow.log
 
 zenodo_data/
+
+# nf-test local cache
+.nf-test/
+
+# Nextflow binary (installed for local testing)
+nextflow
+
+# Stub reportree.py for local nf-test
+reportree.py
+reporree.py

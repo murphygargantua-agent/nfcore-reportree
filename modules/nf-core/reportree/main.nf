@@ -14,20 +14,11 @@ process REPORTREE {
     tuple val(meta), path("${prefix}_partitions.tsv"),             emit: partitions, optional: true
     tuple val("${task.process}"), val('reportree'), eval('reportree.py --version 2>/dev/null | head -1'), emit: versions_reportree, topic: versions
 
-    params {
-        loci_called          = ''
-        analysis             = ''
-        hc_threshold         = ''
-        gt_threshold         = ''
-        columns_summary_report = ''
-        metadata2report      = ''
-        nomenclature_code_levels = ''
-    }
-
     when:
     task.ext.when == null || task.ext.when
 
     script:
+    def args = task.ext.args ?: ''
     prefix = task.ext.prefix ?: (meta.id ? "${meta.id}" : 'reportree_output')
     def metadata_path = metadata.toString()
 
@@ -40,15 +31,7 @@ process REPORTREE {
     def distance_matrix_cmd= distance_matrix && distance_matrix.toFile().length() > 0 ? "-d_mx ${distance_matrix}" : ''
     def sequences_cmd      = sequences      && sequences.toFile().length() > 0 ? "-align ${sequences}" : ''
     def nomenclature_file_cmd = nomenclature_file && nomenclature_file.toFile().length() > 0 ? "--nomenclature-file ${nomenclature_file}" : ''
-    def loci_called_cmd     = loci_called && loci_called != '' ? "--loci-called ${loci_called}" : ''
-    def analysis_cmd        = analysis && analysis != '' ? "--analysis ${analysis}" : ''
-    def hc_threshold_cmd    = hc_threshold && hc_threshold != '' ? "--HC-threshold ${hc_threshold}" : ''
-    def gt_threshold_cmd    = gt_threshold && gt_threshold != '' ? "--GT-threshold ${gt_threshold}" : ''
-    def columns_summary_cmd = columns_summary_report && columns_summary_report != '' ? "--columns_summary_report \"${columns_summary_report}\"" : ''
-    def metadata2report_cmd = metadata2report && metadata2report != '' ? "--metadata2report ${metadata2report}" : ''
-    def nomenclature_code_levels_cmd = nomenclature_code_levels && nomenclature_code_levels != '' ? "--nomenclature-code-levels ${nomenclature_code_levels}" : ''
 
-    // When tree is provided, ReporTree can only use metadata + tree + distance_matrix.
     def has_tree = tree && tree.toFile().length() > 0
     def use_allele_profile = has_tree ? '' : allele_profile_cmd
     def use_partitions = has_tree ? '' : partitions_cmd
@@ -70,14 +53,8 @@ process REPORTREE {
         use_variants,
         use_distance_matrix,
         use_sequences,
-        loci_called_cmd,
-        analysis_cmd,
-        hc_threshold_cmd,
-        gt_threshold_cmd,
-        columns_summary_cmd,
-        metadata2report_cmd,
         nomenclature_file_cmd,
-        nomenclature_code_levels_cmd,
+        args,
         '-out ' + prefix
     ].join(' ')
     """

@@ -8,7 +8,21 @@ nextflow_process {
     tag "modules_nfcore"
     tag "reportree"
 
-    def data = System.getProperty('user.dir') + "/tests/data/reportree"
+    def repoRoot = System.getProperty('user.dir')
+    def repoFile = new java.io.File(repoRoot, 'modules/nf-core/reportree/main.nf')
+    if (!repoFile.exists()) {
+        repoRoot = new java.io.File(repoRoot, '..').getCanonicalPath()
+        repoFile = new java.io.File(repoRoot, 'modules/nf-core/reportree/main.nf')
+        if (!repoFile.exists()) {
+            repoRoot = new java.io.File(repoRoot, '..').getCanonicalPath()
+            repoFile = new java.io.File(repoRoot, 'modules/nf-core/reportree/main.nf')
+            if (!repoFile.exists()) {
+                repoRoot = new java.io.File(repoRoot, '..').getCanonicalPath()
+                repoFile = new java.io.File(repoRoot, 'modules/nf-core/reportree/main.nf')
+            }
+        }
+    }
+    def data = repoRoot + "/tests/data/reportree"
 
     test("reportree stub") {
 
@@ -26,7 +40,8 @@ nextflow_process {
                     file('$data/test_variants.vcf', checkIfExists: true),
                     file('$data/test_variants.tsv', checkIfExists: true),
                     file('$data/test_distance_matrix.tsv', checkIfExists: true),
-                    file('$data/test_sequences.fasta', checkIfExists: true)
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
                 ]
                 """
             }
@@ -52,7 +67,8 @@ nextflow_process {
                     file('$data/test_variants.vcf', checkIfExists: true),
                     file('$data/test_variants.tsv', checkIfExists: true),
                     file('$data/test_distance_matrix.tsv', checkIfExists: true),
-                    file('$data/test_sequences.fasta', checkIfExists: true)
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
                 ]
                 """
             }
@@ -78,7 +94,8 @@ nextflow_process {
                     file('$data/test_variants.vcf', checkIfExists: true),
                     file('$data/test_variants.tsv', checkIfExists: true),
                     file('$data/test_distance_matrix.tsv', checkIfExists: true),
-                    file('$data/test_sequences.fasta', checkIfExists: true)
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
                 ]
                 """
             }
@@ -104,7 +121,8 @@ nextflow_process {
                     file('$data/test_variants.vcf', checkIfExists: true),
                     file('$data/test_variants.tsv', checkIfExists: true),
                     file('$data/test_distance_matrix.tsv', checkIfExists: true),
-                    file('$data/test_sequences.fasta', checkIfExists: true)
+                    file('$data/test_sequences.fasta', checkIfExists: true),
+                    file('$data/test_nomenclature.tsv', checkIfExists: true)
                 ]
                 """
             }
@@ -128,17 +146,33 @@ nextflow_process {
             }
             process {
                 """
-                def zenodo = System.getProperty('user.dir') + "/tests/data/reportree/zenodo"
+                def repoRoot2 = System.getProperty('user.dir')
+                def repoFile2 = new java.io.File(repoRoot2, 'modules/nf-core/reportree/main.nf')
+                if (!repoFile2.exists()) {
+                    repoRoot2 = new java.io.File(repoRoot2, '..').getCanonicalPath()
+                    repoFile2 = new java.io.File(repoRoot2, 'modules/nf-core/reportree/main.nf')
+                    if (!repoFile2.exists()) {
+                        repoRoot2 = new java.io.File(repoRoot2, '..').getCanonicalPath()
+                        repoFile2 = new java.io.File(repoRoot2, 'modules/nf-core/reportree/main.nf')
+                        if (!repoFile2.exists()) {
+                            repoRoot2 = new java.io.File(repoRoot2, '..').getCanonicalPath()
+                            repoFile2 = new java.io.File(repoRoot2, 'modules/nf-core/reportree/main.nf')
+                        }
+                    }
+                }
+                def zenodo = repoRoot2 + "/tests/data/reportree/zenodo/subset"
                 input[0] = [
                     [ id:'zenodo' ],
                     file(zenodo + '/Ct_metadata.tsv', checkIfExists: true),
                     file(zenodo + '/Ct_alleles_missing_code_0.tsv', checkIfExists: true),
                     file(zenodo + '/Ct_partitions_to_setup_HC_nomenclature.tsv', checkIfExists: true),
-                    file('missing', checkIfExists: false),
-                    file('missing', checkIfExists: false),
-                    file('missing', checkIfExists: false),
-                    file('missing', checkIfExists: false),
-                    file('missing', checkIfExists: false)
+                    file(zenodo + '/Ct_partitions_to_setup_GT_nomenclature.tsv', checkIfExists: true),
+                    file('missing1', checkIfExists: false),
+                    file('missing2', checkIfExists: false),
+                    file('missing3', checkIfExists: false),
+                    file('missing4', checkIfExists: false),
+                    file('missing5', checkIfExists: false),
+                    file('missing6', checkIfExists: false)
                 ]
                 """
             }
@@ -146,10 +180,10 @@ nextflow_process {
 
         then {
             assert process.success
-            assert file("zenodo_metadata_w_partitions.tsv").exists
-            assert file("zenodo_partitions_summary.tsv").exists
-            assert file("zenodo_variable_summary.tsv").exists
-            assert file("zenodo_partitions.tsv").exists
+            assert file(process.out.metadata_w_partitions[0][1]).exists()
+            assert file(process.out.partitions_summary[0][1]).exists()
+            assert file(process.out.variable_summary[0][1]).exists()
+            assert file(process.out.partitions[0][1]).exists()
         }
     }
 }
