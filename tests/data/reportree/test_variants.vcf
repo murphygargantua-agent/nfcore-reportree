@@ -1,0 +1,4 @@
+##vcf header
+#CHROM	pos	ID	REF	ALT	QUAL	FILTER	INFO
+A	100	variant_1	A	G	.	.	.
+A	200	variant_2	G	C	.	.	.
