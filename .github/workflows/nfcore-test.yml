@@ -25,6 +25,9 @@ jobs:
       - name: Set up nf-core tools
         run: pip install nf-core==4.1.0
 
+      - name: Install nf-test
+        run: pip install nf-test
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
