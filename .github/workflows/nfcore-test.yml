@@ -31,3 +31,6 @@ jobs:
         run: nf-core modules test reportree --dir .
         env:
           PROFILE: docker
+
+      - name: Run Python unit tests
+        run: python3 tests/test_module.py
