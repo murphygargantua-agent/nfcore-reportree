@@ -1,5 +1,8 @@
-# nf-core modules test data
-tests/data/
+# nf-core modules test data (track test data, ignore full Zenodo background)
+tests/data/reportree/zenodo/02_input_to_setup_cgMLST_1230_background/
+
+# Zenodo subset (50-genome subset for nf-test) - explicitly tracked
+!tests/data/reportree/zenodo/subset/
 
 # Output
 output/
