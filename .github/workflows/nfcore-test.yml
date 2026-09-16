@@ -17,6 +17,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+
       - name: Set up Nextflow
         uses: nf-core/setup-nextflow@v2
         with:
@@ -32,7 +38,7 @@ jobs:
           tar -xzf /tmp/nf-test.tar.gz -C ~/.nf-test
           ln -sf ~/.nf-test/nf-test /usr/local/bin/nf-test
           chmod +x ~/.nf-test/nf-test
-          nf-test --help
+          NXF_JAVA_HOME=$JAVA_HOME nf-test version
 
       - name: Set up Python
         uses: actions/setup-python@v5
